@@ -23,18 +23,25 @@
     </style>
 </head>
 <body>
-<h1 th:utext="${user.username}">username</h1>
+<h2>Пользователь:</h2>
 <table class="table table-dark">
     <tr>
         <th th:width="50">ID</th>
         <th th:width="120">Имя</th>
         <th th:width="120">Фамилия</th>
+        <th th:width="120">Пароль</th>
     </tr>
-    <td th:utext="${user.id}">ID</td>
-    <td th:utext="${user.username}">Имя</td>
-    <td th:utext="${user.surname}">Фамилия</td>
+    <td th:utext="${user.getId()}">ID</td>
+    <td th:utext="${user.getUsername()}">Имя</td>
+    <td th:utext="${user.getSurname()}">Фамилия</td>
+    <td th:utext="${user.getPassword()}">Пароль</td>
 </table>
-<br>
+<br/>
 <button class="buttonLogout" onclick="window.location.href = '/logout';">Выйти</button>
+<form th:method="DELETE"  th:action="@{/{id}(id=${user.getId()})}" th:object="${user}">
+    <input type="submit" class="buttonLogout" value="Удалить"/>
+    <button class="buttonLogout" onclick="window.location.href = '/admin/index';">Назад</button>
+</form>
+<br/>
 </body>
 </html>
