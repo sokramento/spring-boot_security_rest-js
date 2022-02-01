@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.models;
+package ru.kata.spring.boot_security.bootstrap.models;
 
 import javax.persistence.*;
 import java.util.Collection;

@@ -1,17 +1,18 @@
-package ru.kata.spring.boot_security.demo.controllers;
+package ru.kata.spring.boot_security.bootstrap.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.bootstrap.models.User;
+import ru.kata.spring.boot_security.bootstrap.repositories.RoleRepository;
+import ru.kata.spring.boot_security.bootstrap.service.UserService;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class AdminController {
@@ -41,11 +42,11 @@ public class AdminController {
         return "index";
     }
 
-    @GetMapping(value = "admin/show/{id}")
+    @GetMapping(value = "admin/show")
+    @ResponseBody
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getById(id));
-        return "show";
+    public Optional<User> showOne(int id) {
+        return Optional.ofNullable(userService.getById(id));
     }
 
     @GetMapping(value = "admin/new")

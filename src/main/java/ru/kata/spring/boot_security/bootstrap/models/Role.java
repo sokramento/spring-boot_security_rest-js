@@ -1,6 +1,4 @@
-package ru.kata.spring.boot_security.demo.models;
-
-import lombok.Data;
+package ru.kata.spring.boot_security.bootstrap.models;
 
 import javax.persistence.*;
 
@@ -28,5 +26,10 @@ public class Role {
 
     public void setRolename(String rolename) {
         this.rolename = rolename;
+    }
+
+    @Override
+    public String toString() {
+        return rolename;
     }
 }
