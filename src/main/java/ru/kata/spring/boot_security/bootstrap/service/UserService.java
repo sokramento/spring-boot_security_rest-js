@@ -46,6 +46,8 @@ public class UserService implements UserDetailsService {
         userToUpdated.setUsername(user.getUsername());
         userToUpdated.setSurname(user.getSurname());
         userToUpdated.setPassword(user.getPassword());
+        userToUpdated.setAge(user.getAge());
+        userToUpdated.setEmail(user.getEmail());
         userRepository.saveAndFlush(passwordCoder(userToUpdated));
     }
 
@@ -53,20 +55,20 @@ public class UserService implements UserDetailsService {
         userRepository.save(passwordCoder(user));
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username).orElse(null);
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException(
-                    String.format("Username %s not found", username));
+                    String.format("Username %s not found", email));
         }
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
+                user.getEmail(),
                 user.getPassword(),
                 mapRolesToGrantedAuthorities(user.getRoles()));
     }

@@ -11,10 +11,9 @@ import ru.kata.spring.boot_security.bootstrap.service.UserService;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
     private final UserService userService;
@@ -26,46 +25,31 @@ public class AdminController {
         this.roleRepository = roleRepository;
     }
 
-    @GetMapping("admin/hello")
-    public String printWelcome(Model model, Principal principal) {
-        List<String> messages = new ArrayList<>();
-        messages.add("Hello, " + principal.getName() + "! welcome to the Users world!");
-        messages.add("Click the link bellow (:");
-        model.addAttribute("messages", messages);
-        return "hello";
-    }
-
-    @GetMapping(value = "admin/index")
+    @GetMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String index(Model model) {
+    public String getUsers( Model model, Principal principal) {
+        model.addAttribute("user", userService.findByEmail(principal.getName()));
         model.addAttribute("users", userService.allUsers());
         return "index";
     }
 
-    @GetMapping(value = "admin/show")
-    @ResponseBody
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Optional<User> showOne(int id) {
-        return Optional.ofNullable(userService.getById(id));
-    }
-
-    @GetMapping(value = "admin/new")
+    @GetMapping(value = "/new")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String newPerson (@ModelAttribute("user") User user, Model model){
         model.addAttribute("listRoles", roleRepository.findAll());
         return "new";
     }
 
-    @PostMapping (value = "index")
+    @PostMapping ()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String create(@ModelAttribute("user") User user,
                          @RequestParam("listRoles") ArrayList<Integer> roles) {
         user.setRoles(roleRepository.findAllById(roles));
         userService.save(user);
-        return "redirect:/admin/index";
+        return "redirect:/admin";
     }
 
-    @GetMapping(value = "admin/edit/{id}")
+    @GetMapping(value = "/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String edit(Model model, @PathVariable("id") int id){
         model.addAttribute("user", userService.getById(id));
@@ -73,19 +57,27 @@ public class AdminController {
         return "edit";
     }
 
-    @PatchMapping(value = "/{id}")
+    @PutMapping(value = "/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String update(@ModelAttribute("user") User user, @PathVariable("id") int id,
-    @RequestParam("listRoles") ArrayList<Integer>roles){
+    public String update(@ModelAttribute("user") User user,
+                         @PathVariable("id") int id,
+                         @RequestParam("listRoles") ArrayList<Integer>roles){
         user.setRoles(roleRepository.findAllById(roles));
         userService.edit(id, user);
-        return "redirect:/admin/index";
+        return "redirect:/admin";
     }
 
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String delete(@PathVariable("id") int id){
         userService.deleteById(id);
-        return "redirect:/admin/index";
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/info")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String pageForUser (Model model, Principal principal) {
+        model.addAttribute("user",userService.findByEmail(principal.getName()));
+        return "admin_info";
     }
 }

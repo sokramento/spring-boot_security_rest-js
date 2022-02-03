@@ -1,9 +1,12 @@
 package ru.kata.spring.boot_security.bootstrap.models;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
+@Data
 @Table(name="users")
 public class User {
 
@@ -17,6 +20,10 @@ public class User {
     private String surname;
     @Column(name = "password")
     private String password;
+    @Column(name = "age")
+    private int age;
+    @Column(name = "Email")
+    private String email;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "users_roles",
@@ -54,6 +61,22 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Collection<Role> getRoles() {
