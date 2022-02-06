@@ -11,22 +11,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.bootstrap.models.Role;
 import ru.kata.spring.boot_security.bootstrap.models.User;
+import ru.kata.spring.boot_security.bootstrap.repositories.RoleRepository;
 import ru.kata.spring.boot_security.bootstrap.repositories.UserRepository;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        addDefaultUsers();
     }
 
     public List<User> allUsers() {
@@ -82,5 +85,24 @@ public class UserService implements UserDetailsService {
     public User passwordCoder(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return user;
+    }
+
+    public void addDefaultUsers(){
+        roleRepository.save(new Role(1, "ROLE_USER"));
+        roleRepository.save(new Role(2, "ROLE_ADMIN"));
+
+        Set<Role> role1 = new HashSet<>();
+        role1.add(roleRepository.findById(1).orElse(null));
+
+        Set<Role> role2 = new HashSet<>();
+        role2.add(roleRepository.findById(1).orElse(null));
+        role2.add(roleRepository.findById(2).orElse(null));
+
+        User user1 = new User("murat", "samatov", "password",
+                26, "user@bk.ru", role1);
+        User user2 = new User( "karim", "samatov", "password",
+                55, "admin@bk.ru", role2);
+        save(user1);
+        save(user2);
     }
 }

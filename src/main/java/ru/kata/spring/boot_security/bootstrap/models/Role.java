@@ -1,8 +1,11 @@
 package ru.kata.spring.boot_security.bootstrap.models;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
+@Data
 @Table(name = "roles")
 public class Role {
 
@@ -12,19 +15,15 @@ public class Role {
     @Column(name = "rolename")
     private String rolename;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    public Role(int id, String rolename) {
         this.id = id;
+        this.rolename = rolename;
     }
 
-    public String getRolename() {
-        return rolename;
+    public Role() {
     }
 
-    public void setRolename(String rolename) {
+    public Role(String rolename) {
         this.rolename = rolename;
     }
 
