@@ -1,11 +1,8 @@
 package ru.kata.spring.boot_security.bootstrap.models;
 
-import lombok.Data;
-
 import javax.persistence.*;
 
 @Entity
-@Data
 @Table(name = "roles")
 public class Role {
 
@@ -24,6 +21,22 @@ public class Role {
     }
 
     public Role(String rolename) {
+        this.rolename = rolename;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getRolename() {
+        return rolename;
+    }
+
+    public void setRolename(String rolename) {
         this.rolename = rolename;
     }
 

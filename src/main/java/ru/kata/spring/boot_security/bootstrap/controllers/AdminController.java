@@ -5,14 +5,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.bootstrap.models.Role;
 import ru.kata.spring.boot_security.bootstrap.models.User;
 import ru.kata.spring.boot_security.bootstrap.repositories.RoleRepository;
 import ru.kata.spring.boot_security.bootstrap.service.UserService;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Set;
+
 
 @Controller
 @RequestMapping("/admin")
@@ -44,10 +43,9 @@ public class AdminController {
 
     @PostMapping ()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @SuppressWarnings("unchecked")
     public String create(@ModelAttribute("user") User user,
-                         @RequestParam("listRoles") ArrayList<Integer>roles) {
-        user.setRoles((Set<Role>) roleRepository.findAllById(roles));
+                         @RequestParam("listRoles") ArrayList<Integer> roles) {
+        user.setRoles(roleRepository.findAllById(roles));
         userService.save(user);
         return "redirect:/admin";
     }
@@ -60,13 +58,12 @@ public class AdminController {
         return "edit";
     }
 
-    @PutMapping(value = "/{id}")
+    @PatchMapping(value = "/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @SuppressWarnings("unchecked")
     public String update(@ModelAttribute("user") User user,
-                         @PathVariable("id") int id,
-                         @RequestParam("listRoles") ArrayList<Integer>roles){
-        user.setRoles((Set<Role>) roleRepository.findAllById(roles));
+                         @PathVariable(value = "id") int id,
+                         @RequestParam(value = "listRoles") ArrayList<Integer>roles){
+        user.setRoles(roleRepository.findAllById(roles));
         userService.edit(id, user);
         return "redirect:/admin";
     }

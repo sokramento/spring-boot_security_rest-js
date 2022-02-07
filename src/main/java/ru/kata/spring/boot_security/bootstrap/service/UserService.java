@@ -51,7 +51,8 @@ public class UserService implements UserDetailsService {
         userToUpdated.setPassword(user.getPassword());
         userToUpdated.setAge(user.getAge());
         userToUpdated.setEmail(user.getEmail());
-        userRepository.saveAndFlush(passwordCoder(userToUpdated));
+        userToUpdated.setRoles(user.getRoles());
+        save(userToUpdated);
     }
 
     public void save(User user) {
@@ -91,10 +92,10 @@ public class UserService implements UserDetailsService {
         roleRepository.save(new Role(1, "ROLE_USER"));
         roleRepository.save(new Role(2, "ROLE_ADMIN"));
 
-        Set<Role> role1 = new HashSet<>();
+        Collection<Role> role1 = new ArrayList<>();
         role1.add(roleRepository.findById(1).orElse(null));
 
-        Set<Role> role2 = new HashSet<>();
+        Collection<Role> role2 = new ArrayList<>();
         role2.add(roleRepository.findById(1).orElse(null));
         role2.add(roleRepository.findById(2).orElse(null));
 
