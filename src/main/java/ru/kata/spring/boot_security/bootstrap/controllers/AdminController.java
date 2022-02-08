@@ -34,13 +34,6 @@ public class AdminController {
         return "index";
     }
 
-    @GetMapping(value = "/new")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String newPerson (@ModelAttribute("user") User user, Model model){
-        model.addAttribute("listRoles", roleRepository.findAll());
-        return "new";
-    }
-
     @PostMapping ()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String create(@ModelAttribute("user") User user,
@@ -50,13 +43,6 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping(value = "/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String edit(Model model, @PathVariable("id") int id){
-        model.addAttribute("user", userService.getById(id));
-        model.addAttribute("listRoles", roleRepository.findAll());
-        return "edit";
-    }
 
     @PatchMapping(value = "/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
