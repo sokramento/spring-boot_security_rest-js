@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.bootstrap.configs;
+package ru.kata.spring.boot_security.bootstrap.configs.handler;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;

@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public void edit(int id, User user) {
+    public User edit(int id, User user) {
         User userToUpdated = getById(id);
         userToUpdated.setUsername(user.getUsername());
         userToUpdated.setSurname(user.getSurname());
@@ -53,10 +53,12 @@ public class UserService implements UserDetailsService {
         userToUpdated.setEmail(user.getEmail());
         userToUpdated.setRoles(user.getRoles());
         save(userToUpdated);
+        return userToUpdated;
     }
 
-    public void save(User user) {
+    public User save(User user) {
         userRepository.save(passwordCoder(user));
+        return user;
     }
 
     public User findByEmail(String email) {
